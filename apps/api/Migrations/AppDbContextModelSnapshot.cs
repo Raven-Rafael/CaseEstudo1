@@ -142,7 +142,14 @@ namespace CaseEstudo1.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Imagem")
+                        .HasColumnType("text");
+
                     b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -180,9 +187,8 @@ namespace CaseEstudo1.Migrations
                     b.Property<int>("SaborId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Tamanho")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Tamanho")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

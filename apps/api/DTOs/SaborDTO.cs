@@ -2,7 +2,10 @@
 {
     public class SaborDTO
     {
-        public string Nome { get; set; } = string.Empty;
         public decimal Preco { get; set; }
+        public string? Imagem { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Tipo { get; set; } = "Tradicional";
+        
     }
 }

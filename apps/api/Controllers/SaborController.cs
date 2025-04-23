@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using CaseEstudo1.Data;
+using CaseEstudo1.DTOs;
 using CaseEstudo1.Domain;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace CaseEstudo1.Controllers
@@ -12,17 +14,20 @@ namespace CaseEstudo1.Controllers
     public class SaborController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public SaborController(AppDbContext context)
+        public SaborController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sabor>>> GetSabores()
+        public async Task<ActionResult<IEnumerable<SaborDTO>>> Get()
         {
             var sabores = await _context.Sabores.ToListAsync();
-            return Ok(sabores);
+            return _mapper.Map<List<SaborDTO>>(sabores);
         }
 
         [HttpPost]
@@ -33,7 +38,7 @@ namespace CaseEstudo1.Controllers
 
             _context.Sabores.Add(sabor);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetSabores), new { id = sabor.Id }, sabor);
+            return CreatedAtAction(nameof(Get), new { id = sabor.Id }, sabor);
         }
 
         [HttpPut("{id}")]

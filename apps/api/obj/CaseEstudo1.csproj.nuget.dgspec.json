@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\RepositoriosGitHub\\CaeEstudo1\\apps\\api\\CaseEstudo1.csproj": {}
+    "D:\\Projetos\\CaseEstudo1\\apps\\api\\CaseEstudo1.csproj": {}
   },
   "projects": {
-    "D:\\RepositoriosGitHub\\CaeEstudo1\\apps\\api\\CaseEstudo1.csproj": {
+    "D:\\Projetos\\CaseEstudo1\\apps\\api\\CaseEstudo1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RepositoriosGitHub\\CaeEstudo1\\apps\\api\\CaseEstudo1.csproj",
+        "projectUniqueName": "D:\\Projetos\\CaseEstudo1\\apps\\api\\CaseEstudo1.csproj",
         "projectName": "CaseEstudo1",
-        "projectPath": "D:\\RepositoriosGitHub\\CaeEstudo1\\apps\\api\\CaseEstudo1.csproj",
+        "projectPath": "D:\\Projetos\\CaseEstudo1\\apps\\api\\CaseEstudo1.csproj",
         "packagesPath": "C:\\Users\\Raven\\.nuget\\packages\\",
-        "outputPath": "D:\\RepositoriosGitHub\\CaeEstudo1\\apps\\api\\obj\\",
+        "outputPath": "D:\\Projetos\\CaseEstudo1\\apps\\api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Programs\\VIsual Studio Shared Content\\NuGetPackages"

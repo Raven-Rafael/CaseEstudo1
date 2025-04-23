@@ -8,6 +8,7 @@ namespace CaseEstudo1.Architecture.AutoMapper
     {
         public MappingProfile()
         {
+            CreateMap<Sabor, SaborDTO>();
             CreateMap<CreatePizzaDTO, Pizza>();
             CreateMap<UpdatePizzaDTO, Pizza>();
             CreateMap<Pizza, PizzaResponseDTO>();

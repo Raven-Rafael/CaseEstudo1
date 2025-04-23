@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/node_modules/
+*.md
+*.suo
+*.user
+*.csproj.user
+.vscode/
+.dockerignore
+.docker/
+.git
+.gitignore
+.env

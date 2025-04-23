@@ -2,9 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\apps",
-    "\\apps\\api",
-    "\\apps\\api\\Controllers"
+    "\\apps\\api\\Attributes",
+    "\\apps\\api\\Controllers",
+    "\\apps\\api\\Domain",
+    "\\apps\\api\\DTOs"
   ],
-  "SelectedNode": "\\apps\\api\\Controllers\\PizzaController.cs",
+  "SelectedNode": "\\apps\\.gitignore",
   "PreviewInSolutionExplorer": false
 }

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CaseEstudo1.Domain;
+﻿using CaseEstudo1.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace CaseEstudo1.Data
 {
@@ -12,6 +12,8 @@ namespace CaseEstudo1.Data
         public DbSet<Pizza> Pizzas { get; set; }
 
         public DbSet<Sabor> Sabores { get; set; }
+
+        public DbSet<Usuario> Usuarios { get; set; }
 
         public DbSet<PizzaSabor> PizzasSabores { get; set; }
 
@@ -29,10 +31,6 @@ namespace CaseEstudo1.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BordaPrecoPorTamanho>()
-                .Property(b => b.Tamanho)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<SaborPrecoPorTamanho>()
                 .Property(b => b.Tamanho)
                 .HasConversion<string>();
 

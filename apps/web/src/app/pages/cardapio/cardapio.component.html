@@ -1,0 +1,9 @@
+  <div class="cardapio">
+    <div *ngFor="let sabor of sabores" class="sabor-card">
+      <h3>{{ sabor.nome }}</h3>
+      <img [src]="getImagem(sabor)" alt="{{ sabor.nome }}">
+      <p>{{ sabor.descricao }}</p>
+      <p><strong>R$ {{ sabor.preco | number:'1.2-2' }}</strong></p>
+    </div>
+  </div>
+  
