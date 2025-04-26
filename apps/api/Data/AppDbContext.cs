@@ -13,11 +13,16 @@ namespace CaseEstudo1.Data
 
         public DbSet<Sabor> Sabores { get; set; }
 
+        public DbSet<Bebida> Bebidas { get; set; }
+
         public DbSet<Usuario> Usuarios { get; set; }
+
+        public DbSet<Ingrediente> Ingredientes { get; set; }
 
         public DbSet<PizzaSabor> PizzasSabores { get; set; }
 
-        public DbSet<Ingrediente> Ingredientes { get; set; }
+        public DbSet<PrecoBebida> PrecosBebidas { get; set; }
+
 
         public DbSet<SaborIngrediente> SaboresIngredientes { get; set; }
 
@@ -25,11 +30,17 @@ namespace CaseEstudo1.Data
 
         public DbSet<SaborPrecoPorTamanho> SaboresPrecosPorTamanhos { get; set; }
 
-
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PrecoBebida>()
+                .Property(p => p.Tamanho)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<PrecoBebida>()
+                .HasOne(p => p.Bebida)
+                .WithMany(b => b.Precos)
+                .HasForeignKey(p => p.BebidaId);
+
             modelBuilder.Entity<BordaPrecoPorTamanho>()
                 .Property(b => b.Tamanho)
                 .HasConversion<string>();

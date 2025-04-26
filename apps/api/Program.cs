@@ -22,6 +22,7 @@ namespace CaseEstudo1
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IBebidaService, BebidaService>();
 
             var app = builder.Build();
 
