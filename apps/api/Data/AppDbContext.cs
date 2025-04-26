@@ -12,18 +12,21 @@ namespace CaseEstudo1.Data
         public DbSet<Pizza> Pizzas { get; set; }
 
         public DbSet<Sabor> Sabores { get; set; }
+        
+        public DbSet<Pedido> Pedidos { get; set; }
 
         public DbSet<Bebida> Bebidas { get; set; }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        
+        public DbSet<PedidoItem> PedidosItens { get; set; }
 
         public DbSet<Ingrediente> Ingredientes { get; set; }
 
         public DbSet<PizzaSabor> PizzasSabores { get; set; }
 
         public DbSet<PrecoBebida> PrecosBebidas { get; set; }
-
-
+ 
         public DbSet<SaborIngrediente> SaboresIngredientes { get; set; }
 
         public DbSet<BordaPrecoPorTamanho> BordasPrecosPorTamanhos { get; set; }
@@ -32,6 +35,11 @@ namespace CaseEstudo1.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<PedidoItem>()
+                .Property(p => p.TamanhoBebida)
+                .HasConversion<string>();
+
             modelBuilder.Entity<PrecoBebida>()
                 .Property(p => p.Tamanho)
                 .HasConversion<string>();

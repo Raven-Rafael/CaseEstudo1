@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CaseEstudo1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250423204121_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250426030934_AdicionaBebidas")]
+    partial class AdicionaBebidas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,30 @@ namespace CaseEstudo1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("CaseEstudo1.Domain.Bebida", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Disponivel")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bebidas");
+                });
 
             modelBuilder.Entity("CaseEstudo1.Domain.Borda", b =>
                 {
@@ -86,6 +110,108 @@ namespace CaseEstudo1.Migrations
                     b.ToTable("Ingredientes");
                 });
 
+            modelBuilder.Entity("CaseEstudo1.Domain.Pedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pedidos");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PedidoItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BebidaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PizzaId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TamanhoBebida")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BebidaId");
+
+                    b.HasIndex("PizzaId");
+
+                    b.ToTable("PedidosItens");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PedidoItemBebida", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BebidaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Tamanho")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BebidaId");
+
+                    b.HasIndex("PedidoId");
+
+                    b.ToTable("PedidoItemBebida");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PedidoItemPizza", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PizzaId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("PizzaId");
+
+                    b.ToTable("PedidoItemPizza");
+                });
+
             modelBuilder.Entity("CaseEstudo1.Domain.Pizza", b =>
                 {
                     b.Property<int>("Id")
@@ -135,6 +261,31 @@ namespace CaseEstudo1.Migrations
                     b.HasIndex("SaborId");
 
                     b.ToTable("PizzasSabores");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PrecoBebida", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BebidaId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Tamanho")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BebidaId");
+
+                    b.ToTable("PrecosBebidas");
                 });
 
             modelBuilder.Entity("CaseEstudo1.Domain.Sabor", b =>
@@ -200,6 +351,32 @@ namespace CaseEstudo1.Migrations
                     b.ToTable("SaboresPrecosPorTamanhos");
                 });
 
+            modelBuilder.Entity("CaseEstudo1.Domain.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
             modelBuilder.Entity("CaseEstudo1.Domain.BordaPrecoPorTamanho", b =>
                 {
                     b.HasOne("CaseEstudo1.Domain.Borda", "Borda")
@@ -209,6 +386,59 @@ namespace CaseEstudo1.Migrations
                         .IsRequired();
 
                     b.Navigation("Borda");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PedidoItem", b =>
+                {
+                    b.HasOne("CaseEstudo1.Domain.Bebida", "Bebida")
+                        .WithMany()
+                        .HasForeignKey("BebidaId");
+
+                    b.HasOne("CaseEstudo1.Domain.Pizza", "Pizza")
+                        .WithMany()
+                        .HasForeignKey("PizzaId");
+
+                    b.Navigation("Bebida");
+
+                    b.Navigation("Pizza");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PedidoItemBebida", b =>
+                {
+                    b.HasOne("CaseEstudo1.Domain.Bebida", "Bebida")
+                        .WithMany()
+                        .HasForeignKey("BebidaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CaseEstudo1.Domain.Pedido", "Pedido")
+                        .WithMany("ItensBebida")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bebida");
+
+                    b.Navigation("Pedido");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PedidoItemPizza", b =>
+                {
+                    b.HasOne("CaseEstudo1.Domain.Pedido", "Pedido")
+                        .WithMany("ItensPizza")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CaseEstudo1.Domain.Pizza", "Pizza")
+                        .WithMany()
+                        .HasForeignKey("PizzaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedido");
+
+                    b.Navigation("Pizza");
                 });
 
             modelBuilder.Entity("CaseEstudo1.Domain.Pizza", b =>
@@ -237,6 +467,17 @@ namespace CaseEstudo1.Migrations
                     b.Navigation("Pizza");
 
                     b.Navigation("Sabor");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.PrecoBebida", b =>
+                {
+                    b.HasOne("CaseEstudo1.Domain.Bebida", "Bebida")
+                        .WithMany("Precos")
+                        .HasForeignKey("BebidaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bebida");
                 });
 
             modelBuilder.Entity("CaseEstudo1.Domain.SaborIngrediente", b =>
@@ -269,9 +510,21 @@ namespace CaseEstudo1.Migrations
                     b.Navigation("Sabor");
                 });
 
+            modelBuilder.Entity("CaseEstudo1.Domain.Bebida", b =>
+                {
+                    b.Navigation("Precos");
+                });
+
             modelBuilder.Entity("CaseEstudo1.Domain.Ingrediente", b =>
                 {
                     b.Navigation("SaboresIngredientes");
+                });
+
+            modelBuilder.Entity("CaseEstudo1.Domain.Pedido", b =>
+                {
+                    b.Navigation("ItensBebida");
+
+                    b.Navigation("ItensPizza");
                 });
 
             modelBuilder.Entity("CaseEstudo1.Domain.Pizza", b =>

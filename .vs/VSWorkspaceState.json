@@ -3,12 +3,9 @@
     "",
     "\\apps",
     "\\apps\\api",
-    "\\apps\\api\\Architecture",
-    "\\apps\\api\\Architecture\\Services",
-    "\\apps\\api\\Attributes",
-    "\\apps\\api\\bin",
-    "\\apps\\api\\Controllers",
-    "\\apps\\api\\Domain"
+    "\\apps\\api\\DTOs",
+    "\\apps\\api\\Migrations"
   ],
+  "SelectedNode": "\\apps\\api",
   "PreviewInSolutionExplorer": false
 }

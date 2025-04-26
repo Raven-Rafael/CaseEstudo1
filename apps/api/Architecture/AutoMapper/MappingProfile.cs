@@ -21,6 +21,17 @@ namespace CaseEstudo1.Architecture.AutoMapper
 
             CreateMap<CreatePrecoBebidaDTO, PrecoBebida>();
             CreateMap<PrecoBebida, PrecoBebidaDTO>();
+
+            CreateMap<PedidoDTO, Pedido>();
+            CreateMap<PedidoItemDTO, PedidoItem>();
+
+            CreateMap<Pedido, PedidoResponseDTO>();
+            CreateMap<PedidoItem, PedidoItemResponseDTO>()
+                .ForMember(dest => dest.NomePizza, opt => opt.MapFrom(src => src.Pizza != null ? src.Pizza.Nome : null))
+                .ForMember(dest => dest.NomeBebida, opt => opt.MapFrom(src => src.Bebida != null ? src.Bebida.Nome : null))
+                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario))
+                .ForMember(dest => dest.PrecoTotal, opt => opt.MapFrom(src => src.PrecoUnitario * src.Quantidade));
+
         }
     }
 }

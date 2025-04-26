@@ -6,11 +6,26 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CaseEstudo1.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AdicionaBebidas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Bebidas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Tipo = table.Column<string>(type: "text", nullable: false),
+                    Disponivel = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bebidas", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Bordas",
                 columns: table => new
@@ -39,6 +54,20 @@ namespace CaseEstudo1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Pedidos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Total = table.Column<decimal>(type: "numeric", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pedidos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sabores",
                 columns: table => new
                 {
@@ -51,6 +80,42 @@ namespace CaseEstudo1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sabores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    SenhaHash = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PrecosBebidas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Tamanho = table.Column<string>(type: "text", nullable: false),
+                    Preco = table.Column<decimal>(type: "numeric", nullable: false),
+                    BebidaId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PrecosBebidas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PrecosBebidas_Bebidas_BebidaId",
+                        column: x => x.BebidaId,
+                        principalTable: "Bebidas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,6 +160,33 @@ namespace CaseEstudo1.Migrations
                         column: x => x.BordaId,
                         principalTable: "Bordas",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PedidoItemBebida",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PedidoId = table.Column<int>(type: "integer", nullable: false),
+                    BebidaId = table.Column<int>(type: "integer", nullable: false),
+                    Tamanho = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PedidoItemBebida", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PedidoItemBebida_Bebidas_BebidaId",
+                        column: x => x.BebidaId,
+                        principalTable: "Bebidas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PedidoItemBebida_Pedidos_PedidoId",
+                        column: x => x.PedidoId,
+                        principalTable: "Pedidos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,6 +235,59 @@ namespace CaseEstudo1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PedidoItemPizza",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PedidoId = table.Column<int>(type: "integer", nullable: false),
+                    PizzaId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PedidoItemPizza", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PedidoItemPizza_Pedidos_PedidoId",
+                        column: x => x.PedidoId,
+                        principalTable: "Pedidos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PedidoItemPizza_Pizzas_PizzaId",
+                        column: x => x.PizzaId,
+                        principalTable: "Pizzas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PedidosItens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PizzaId = table.Column<int>(type: "integer", nullable: true),
+                    BebidaId = table.Column<int>(type: "integer", nullable: true),
+                    TamanhoBebida = table.Column<string>(type: "text", nullable: true),
+                    Quantidade = table.Column<int>(type: "integer", nullable: false),
+                    PrecoUnitario = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PedidosItens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PedidosItens_Bebidas_BebidaId",
+                        column: x => x.BebidaId,
+                        principalTable: "Bebidas",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PedidosItens_Pizzas_PizzaId",
+                        column: x => x.PizzaId,
+                        principalTable: "Pizzas",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PizzasSabores",
                 columns: table => new
                 {
@@ -172,6 +317,36 @@ namespace CaseEstudo1.Migrations
                 column: "BordaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PedidoItemBebida_BebidaId",
+                table: "PedidoItemBebida",
+                column: "BebidaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidoItemBebida_PedidoId",
+                table: "PedidoItemBebida",
+                column: "PedidoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidoItemPizza_PedidoId",
+                table: "PedidoItemPizza",
+                column: "PedidoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidoItemPizza_PizzaId",
+                table: "PedidoItemPizza",
+                column: "PizzaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidosItens_BebidaId",
+                table: "PedidosItens",
+                column: "BebidaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PedidosItens_PizzaId",
+                table: "PedidosItens",
+                column: "PizzaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pizzas_BordaId",
                 table: "Pizzas",
                 column: "BordaId");
@@ -180,6 +355,11 @@ namespace CaseEstudo1.Migrations
                 name: "IX_PizzasSabores_SaborId",
                 table: "PizzasSabores",
                 column: "SaborId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrecosBebidas_BebidaId",
+                table: "PrecosBebidas",
+                column: "BebidaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaboresIngredientes_IngredienteId",
@@ -199,7 +379,19 @@ namespace CaseEstudo1.Migrations
                 name: "BordasPrecosPorTamanhos");
 
             migrationBuilder.DropTable(
+                name: "PedidoItemBebida");
+
+            migrationBuilder.DropTable(
+                name: "PedidoItemPizza");
+
+            migrationBuilder.DropTable(
+                name: "PedidosItens");
+
+            migrationBuilder.DropTable(
                 name: "PizzasSabores");
+
+            migrationBuilder.DropTable(
+                name: "PrecosBebidas");
 
             migrationBuilder.DropTable(
                 name: "SaboresIngredientes");
@@ -208,7 +400,16 @@ namespace CaseEstudo1.Migrations
                 name: "SaboresPrecosPorTamanhos");
 
             migrationBuilder.DropTable(
+                name: "Usuarios");
+
+            migrationBuilder.DropTable(
+                name: "Pedidos");
+
+            migrationBuilder.DropTable(
                 name: "Pizzas");
+
+            migrationBuilder.DropTable(
+                name: "Bebidas");
 
             migrationBuilder.DropTable(
                 name: "Ingredientes");
