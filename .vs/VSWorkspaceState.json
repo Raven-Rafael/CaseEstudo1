@@ -3,9 +3,9 @@
     "",
     "\\apps",
     "\\apps\\api",
-    "\\apps\\api\\Migrations",
-    "\\apps\\docker"
+    "\\apps\\api\\Controllers",
+    "\\apps\\api\\DTOs"
   ],
-  "SelectedNode": "\\apps\\docker\\docker-compose.yml",
+  "SelectedNode": "\\apps\\api\\Controllers\\BordaController.cs",
   "PreviewInSolutionExplorer": false
 }

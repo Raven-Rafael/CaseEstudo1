@@ -3,6 +3,7 @@ using CaseEstudo1.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CaseEstudo1.Domain;
 
 namespace CaseEstudo1.Controllers
 {

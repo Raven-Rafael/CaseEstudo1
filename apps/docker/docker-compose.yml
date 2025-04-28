@@ -26,15 +26,15 @@ services:
       - "${API_PORT}:80"
 
 
-  #web:
-  #  build:
-   #   context: ../web
+    #web:
+    #  build:
+    #   context: ../web
     #  dockerfile: docker/Dockerfile.web
     #container_name: pizzaria_front
     #ports:
     #  - "${WEB_PORT}:80"
-   # depends_on:
-   #   - api
+    # depends_on:
+    #   - api
 
 volumes:
   pgdata:

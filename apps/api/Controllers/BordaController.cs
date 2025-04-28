@@ -1,10 +1,12 @@
-﻿using CaseEstudo1.Data;
-using CaseEstudo1.DTOs;
+﻿using AutoMapper;
+using CaseEstudo1.Architecture.Interfaces;
+using CaseEstudo1.Data;
 using CaseEstudo1.Domain;
-using System.Threading.Tasks;
+using CaseEstudo1.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CaseEstudo1.Controllers
 {
@@ -12,31 +14,41 @@ namespace CaseEstudo1.Controllers
     [Route("api/[controller]")]
     public class BordaController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IBordaService _bordaService;
 
-        public BordaController(AppDbContext context)
+        public BordaController(IBordaService bordaService)
         {
-            _context = context;
+            _bordaService = bordaService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BordaPrecoDTO>>> GetByTamanho([FromQuery] TamanhoPizzaEnum tamanho)
+        public async Task<ActionResult<IEnumerable<BordaDTO>>> Listar()
         {
-            var bordas = await _context.BordasPrecosPorTamanhos
-                .Where(b => b.Tamanho == tamanho)
-                .Include(b => b.Borda)
-                .Select(b => new BordaPrecoDTO
-                {
-                    Nome = b.Borda!.Nome,
-                    Preco = b.Preco
-                })
-                .ToListAsync();
-
-            if (!bordas.Any())
-                return NotFound($"Nenhuma borda encontrada para o tamanho: {tamanho}");
-
+            var bordas = await _bordaService.ListarAsync();
             return Ok(bordas);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<BordaDTO>> Criar([FromBody] CreateBordaDTO dto)
+        {
+            var novaBorda = await _bordaService.CriarAsync(dto);
+            return CreatedAtAction(nameof(Listar), new { id = novaBorda.Id }, novaBorda);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Atualizar(int id, [FromBody] UpdateBordaDTO dto)
+        {
+            var atualizado = await _bordaService.AtualizarAsync(id, dto);
+            if (!atualizado) return NotFound();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Deletar(int id)
+        {
+            var deletado = await _bordaService.DeletarAsync(id);
+            if (!deletado) return NotFound();
+            return NoContent();
+        }
     }
-    
 }
