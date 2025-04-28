@@ -8,30 +8,22 @@ namespace CaseEstudo1.Architecture.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<Sabor, SaborDTO>();
+
             CreateMap<CreatePizzaDTO, Pizza>();
             CreateMap<UpdatePizzaDTO, Pizza>();
-            CreateMap<Pizza, PizzaResponseDTO>();
+            CreateMap<Pizza, PizzaResponseDTO>()
+                .ForMember(dest => dest.NomeBorda, opt => opt.MapFrom(src => src.Borda != null ? src.Borda.Nome : null));
 
-            CreateMap<CreateBebidaDTO, Bebida>();
-            CreateMap<UpdateBebidaDTO, Bebida>();
-            CreateMap<Bebida, BebidaDTO>();
-            CreateMap<Bebida, BebidaComPrecosDTO>()
-                .ForMember(dest => dest.Precos, opt => opt.MapFrom(src => src.Precos));
-
-            CreateMap<CreatePrecoBebidaDTO, PrecoBebida>();
-            CreateMap<PrecoBebida, PrecoBebidaDTO>();
+            CreateMap<Sabor, SaborDTO>();
 
             CreateMap<PedidoDTO, Pedido>();
-            CreateMap<PedidoItemDTO, PedidoItem>();
-
-            CreateMap<Pedido, PedidoResponseDTO>();
-            CreateMap<PedidoItem, PedidoItemResponseDTO>()
-                .ForMember(dest => dest.NomePizza, opt => opt.MapFrom(src => src.Pizza != null ? src.Pizza.Nome : null))
-                .ForMember(dest => dest.NomeBebida, opt => opt.MapFrom(src => src.Bebida != null ? src.Bebida.Nome : null))
-                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario))
-                .ForMember(dest => dest.PrecoTotal, opt => opt.MapFrom(src => src.PrecoUnitario * src.Quantidade));
-
+            CreateMap<Pedido, PedidoResponseDTO>()
+                .ForMember(dest => dest.NomePizza, opt => opt.MapFrom(src => src.Pizza.Nome))
+                .ForMember(dest => dest.PrecoPizza, opt => opt.MapFrom(src => src.Pizza.Preco))
+                .ForMember(dest => dest.NomeBebida, opt => opt.MapFrom(src => src.NomeBebida))
+                .ForMember(dest => dest.PrecoBebida, opt => opt.MapFrom(src => src.PrecoBebida))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.PrecoTotal));
         }
     }
 }

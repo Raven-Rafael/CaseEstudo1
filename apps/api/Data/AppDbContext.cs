@@ -8,63 +8,33 @@ namespace CaseEstudo1.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Borda> Bordas { get; set; }
-
         public DbSet<Pizza> Pizzas { get; set; }
-
         public DbSet<Sabor> Sabores { get; set; }
-        
         public DbSet<Pedido> Pedidos { get; set; }
-
         public DbSet<Bebida> Bebidas { get; set; }
-
         public DbSet<Usuario> Usuarios { get; set; }
-        
-        public DbSet<PedidoItem> PedidosItens { get; set; }
-
         public DbSet<Ingrediente> Ingredientes { get; set; }
-
         public DbSet<PizzaSabor> PizzasSabores { get; set; }
-
-        public DbSet<PrecoBebida> PrecosBebidas { get; set; }
- 
         public DbSet<SaborIngrediente> SaboresIngredientes { get; set; }
-
+        public DbSet<PrecoBebidaPorTamanho> PrecosBebidaPorTamanho { get; set; }
         public DbSet<BordaPrecoPorTamanho> BordasPrecosPorTamanhos { get; set; }
-
         public DbSet<SaborPrecoPorTamanho> SaboresPrecosPorTamanhos { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            modelBuilder.Entity<PedidoItem>()
-                .Property(p => p.TamanhoBebida)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<PrecoBebida>()
-                .Property(p => p.Tamanho)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<PrecoBebida>()
-                .HasOne(p => p.Bebida)
-                .WithMany(b => b.Precos)
-                .HasForeignKey(p => p.BebidaId);
-
-            modelBuilder.Entity<BordaPrecoPorTamanho>()
-                .Property(b => b.Tamanho)
-                .HasConversion<string>();
-
             modelBuilder.Entity<PizzaSabor>()
                 .HasKey(ps => new { ps.PizzaId, ps.SaborId });
 
-            modelBuilder.Entity<PizzaSabor>()
+           /* modelBuilder.Entity<PizzaSabor>()
                 .HasOne(ps => ps.Pizza)
                 .WithMany(p => p.PizzasSabores)
                 .HasForeignKey(ps => ps.PizzaId);
 
             modelBuilder.Entity<PizzaSabor>()
                 .HasOne(ps => ps.Sabor)
-                .WithMany(s => s.PizzasSabores)
-                .HasForeignKey(ps => ps.SaborId);
+                .WithMany(s => s.PizzasSabores) 
+                .HasForeignKey(ps => ps.SaborId);*/
 
             modelBuilder.Entity<SaborIngrediente>()
                 .HasKey(si => new { si.SaborId, si.IngredienteId });
@@ -79,7 +49,22 @@ namespace CaseEstudo1.Data
                 .WithMany(i => i.SaboresIngredientes)
                 .HasForeignKey(si => si.IngredienteId);
 
+            modelBuilder.Entity<BordaPrecoPorTamanho>()
+                .Property(b => b.Tamanho)
+                .HasConversion<string>();
 
+            modelBuilder.Entity<SaborPrecoPorTamanho>()
+                .Property(s => s.Tamanho)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<PrecoBebidaPorTamanho>()
+                .Property(p => p.Tamanho)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<PrecoBebidaPorTamanho>()
+                .HasOne(p => p.Bebida)
+                .WithMany(b => b.Precos)
+                .HasForeignKey(p => p.BebidaId);
         }
     }
 }

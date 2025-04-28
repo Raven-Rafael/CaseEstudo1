@@ -3,9 +3,9 @@
     "",
     "\\apps",
     "\\apps\\api",
-    "\\apps\\api\\Data",
+    "\\apps\\api\\Migrations",
     "\\apps\\docker"
   ],
-  "SelectedNode": "\\apps\\api",
+  "SelectedNode": "\\apps\\docker\\docker-compose.yml",
   "PreviewInSolutionExplorer": false
 }

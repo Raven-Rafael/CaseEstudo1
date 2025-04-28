@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CaseEstudo1.Architecture.Interfaces;
+﻿using CaseEstudo1.Architecture.Interfaces;
 using CaseEstudo1.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -21,8 +20,7 @@ namespace CaseEstudo1.Controllers
         [HttpPost]
         public async Task<ActionResult<PedidoResponseDTO>> CriarPedido([FromBody] PedidoDTO pedidoDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var novoPedido = await _pedidoService.CriarPedidoAsync(pedidoDto);
             return CreatedAtAction(nameof(BuscarPorId), new { id = novoPedido.Id }, novoPedido);
@@ -39,19 +37,16 @@ namespace CaseEstudo1.Controllers
         public async Task<ActionResult<PedidoResponseDTO>> BuscarPorId(int id)
         {
             var pedido = await _pedidoService.BuscarPedidoPorIdAsync(id);
-            if (pedido == null)
-                return NotFound();
+            if (pedido == null) return NotFound();
 
             return Ok(pedido);
-
-
         }
 
         [HttpPut("{id}/status")]
         public async Task<IActionResult> AtualizarStatus(int id, [FromBody] string novoStatus)
         {
-            var sucesso = await _pedidoService.AtualizarStatusAsync(id, novoStatus);
-            if (!sucesso) return NotFound();
+            var atualizado = await _pedidoService.AtualizarStatusAsync(id, novoStatus);
+            if (!atualizado) return NotFound();
 
             return NoContent();
         }
@@ -59,12 +54,10 @@ namespace CaseEstudo1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletarPedido(int id)
         {
-            var sucesso = await _pedidoService.DeletarPedidoAsync(id);
-            if (!sucesso) return NotFound();
+            var deletado = await _pedidoService.DeletarPedidoAsync(id);
+            if (!deletado) return NotFound();
 
             return NoContent();
         }
     }
-
-
 }

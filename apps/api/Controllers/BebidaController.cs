@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CaseEstudo1.Architecture.Interfaces;
+﻿using CaseEstudo1.Architecture.Interfaces;
 using CaseEstudo1.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -19,69 +18,48 @@ namespace CaseEstudo1.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BebidaComPrecosDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<BebidaResponseDTO>>> Listar()
         {
-            var bebidas = await _bebidaService.GetAllAsync();
+            var bebidas = await _bebidaService.ListarAsync();
             return Ok(bebidas);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BebidaComPrecosDTO>> GetById(int id)
+        public async Task<ActionResult<BebidaResponseDTO>> BuscarPorId(int id)
         {
-            var bebida = await _bebidaService.GetByIdAsync(id);
-            if (bebida == null) return NotFound();
+            var bebida = await _bebidaService.BuscarPorIdAsync(id);
+            if (bebida == null)
+                return NotFound();
+
             return Ok(bebida);
         }
 
-        [HttpGet("disponiveis")]
-        public async Task<ActionResult<IEnumerable<BebidaComPrecosDTO>>> GetDisponiveis()
-        {
-            var bebidas = await _bebidaService.GetDisponiveisAsync();
-            return Ok(bebidas);
-        }
-
-        [HttpGet("tipo/{tipo}")]
-        public async Task<ActionResult<IEnumerable<BebidaComPrecosDTO>>> GetByTipo(string tipo)
-        {
-            var bebidas = await _bebidaService.GetByTipoAsync(tipo);
-            return Ok(bebidas);
-        }
-
         [HttpPost]
-        public async Task<ActionResult<BebidaDTO>> Create(CreateBebidaDTO dto)
+        public async Task<ActionResult<BebidaResponseDTO>> Criar([FromBody] CreateBebidaDTO dto)
         {
-            var bebida = await _bebidaService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = bebida.Id }, bebida);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var novaBebida = await _bebidaService.CriarAsync(dto);
+            return CreatedAtAction(nameof(BuscarPorId), new { id = novaBebida.Id }, novaBebida);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateBebidaDTO dto)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] UpdateBebidaDTO dto)
         {
-            var sucesso = await _bebidaService.UpdateAsync(id, dto);
-            if (!sucesso) return NotFound();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var atualizado = await _bebidaService.AtualizarAsync(id, dto);
+            if (!atualizado) return NotFound();
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Deletar(int id)
         {
-            var sucesso = await _bebidaService.DeleteAsync(id);
-            if (!sucesso) return NotFound();
-            return NoContent();
-        }
+            var deletado = await _bebidaService.DeletarAsync(id);
+            if (!deletado) return NotFound();
 
-        [HttpPost("preco")]
-        public async Task<ActionResult<PrecoBebidaDTO>> AddPreco(CreatePrecoBebidaDTO dto)
-        {
-            var preco = await _bebidaService.AddPrecoAsync(dto);
-            return Ok(preco);
-        }
-
-        [HttpDelete("preco/{id}")]
-        public async Task<IActionResult> DeletePreco(int id)
-        {
-            var sucesso = await _bebidaService.DeletePrecoAsync(id);
-            if (!sucesso) return NotFound();
             return NoContent();
         }
     }

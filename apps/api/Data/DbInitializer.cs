@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CaseEstudo1.Data;
 using CaseEstudo1.Domain;
+using System.Collections.Generic;
 
 namespace CaseEstudo1.Data
 {
@@ -8,7 +9,8 @@ namespace CaseEstudo1.Data
     {
         public static void Initialize(AppDbContext context)
         {
-            // Verifica se já existem dados para evitar duplicações
+            context.Database.EnsureCreated();
+
             if (!context.Pizzas.Any())
             {
                 context.Pizzas.AddRange(
@@ -20,10 +22,30 @@ namespace CaseEstudo1.Data
 
             if (!context.Bebidas.Any())
             {
-                context.Bebidas.AddRange(
-                    new Bebida { Nome = "Coca-Cola", Preco = 5.00m },
-                    new Bebida { Nome = "Guaraná", Preco = 4.50m }
-                );
+                var cocaCola = new Bebida
+                {
+                    Nome = "Coca-Cola",
+                    Tipo = "Refrigerante",
+                    Disponivel = true,
+                    Precos = new List<PrecoBebidaPorTamanho>
+                    {
+                        new PrecoBebidaPorTamanho { Tamanho = TamanhoBebidaEnum.Lata, Preco = 5.00m },
+                        new PrecoBebidaPorTamanho { Tamanho = TamanhoBebidaEnum.Garrafa2L, Preco = 10.00m }
+                    }
+                };
+
+                var guarana = new Bebida
+                {
+                    Nome = "Guaraná",
+                    Tipo = "Refrigerante",
+                    Disponivel = true,
+                    Precos = new List<PrecoBebidaPorTamanho>
+                    {
+                        new PrecoBebidaPorTamanho { Tamanho = TamanhoBebidaEnum.Lata, Preco = 4.50m }
+                    }
+                };
+
+                context.Bebidas.AddRange(cocaCola, guarana);
                 context.SaveChanges();
             }
         }

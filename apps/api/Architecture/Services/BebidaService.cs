@@ -21,88 +21,69 @@ namespace CaseEstudo1.Architecture.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<BebidaComPrecosDTO>> GetAllAsync()
+        public async Task<IEnumerable<BebidaResponseDTO>> ListarAsync()
         {
             var bebidas = await _context.Bebidas
                 .Include(b => b.Precos)
                 .ToListAsync();
-
-            return _mapper.Map<IEnumerable<BebidaComPrecosDTO>>(bebidas);
+            return _mapper.Map<IEnumerable<BebidaResponseDTO>>(bebidas);
         }
 
-        public async Task<BebidaComPrecosDTO?> GetByIdAsync(int id)
+        public async Task<BebidaResponseDTO?> BuscarPorIdAsync(int id)
         {
             var bebida = await _context.Bebidas
                 .Include(b => b.Precos)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-            return bebida == null ? null : _mapper.Map<BebidaComPrecosDTO>(bebida);
+            return bebida == null ? null : _mapper.Map<BebidaResponseDTO>(bebida);
         }
 
-        public async Task<BebidaDTO> CreateAsync(CreateBebidaDTO dto)
+        public async Task<BebidaResponseDTO> CriarAsync(CreateBebidaDTO dto)
         {
             var bebida = _mapper.Map<Bebida>(dto);
+
             _context.Bebidas.Add(bebida);
             await _context.SaveChangesAsync();
-            return _mapper.Map<BebidaDTO>(bebida);
+
+            return _mapper.Map<BebidaResponseDTO>(bebida);
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdateBebidaDTO dto)
+        public async Task<bool> AtualizarAsync(int id, UpdateBebidaDTO dto)
         {
-            var bebida = await _context.Bebidas.FindAsync(id);
-            if (bebida == null) return false;
+            var bebida = await _context.Bebidas
+                .Include(b => b.Precos)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
-            _mapper.Map(dto, bebida);
+            if (bebida == null)
+                return false;
+
+            bebida.Nome = dto.Nome;
+            bebida.Disponivel = dto.Disponivel;
+
+            _context.PrecosBebidaPorTamanho.RemoveRange(bebida.Precos);
+
+            bebida.Precos = dto.Precos.Select(p => new PrecoBebidaPorTamanho
+            {
+                Tamanho = p.Tamanho,
+                Preco = p.Preco
+            }).ToList();
+
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeletarAsync(int id)
         {
-            var bebida = await _context.Bebidas.FindAsync(id);
-            if (bebida == null) return false;
+            var bebida = await _context.Bebidas
+                .Include(b => b.Precos)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (bebida == null)
+                return false;
 
             _context.Bebidas.Remove(bebida);
             await _context.SaveChangesAsync();
             return true;
-        }
-
-        public async Task<PrecoBebidaDTO> AddPrecoAsync(CreatePrecoBebidaDTO dto)
-        {
-            var preco = _mapper.Map<PrecoBebida>(dto);
-            _context.PrecosBebidas.Add(preco);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<PrecoBebidaDTO>(preco);
-        }
-
-        public async Task<bool> DeletePrecoAsync(int id)
-        {
-            var preco = await _context.PrecosBebidas.FindAsync(id);
-            if (preco == null) return false;
-
-            _context.PrecosBebidas.Remove(preco);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<IEnumerable<BebidaComPrecosDTO>> GetByTipoAsync(string tipo)
-        {
-            var bebidas = await _context.Bebidas
-                .Include(b => b.Precos)
-                .Where(b => b.Tipo == tipo)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<BebidaComPrecosDTO>>(bebidas);
-        }
-
-        public async Task<IEnumerable<BebidaComPrecosDTO>> GetDisponiveisAsync()
-        {
-            var bebidas = await _context.Bebidas
-                .Include(b => b.Precos)
-                .Where(b => b.Disponivel)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<BebidaComPrecosDTO>>(bebidas);
         }
     }
 }

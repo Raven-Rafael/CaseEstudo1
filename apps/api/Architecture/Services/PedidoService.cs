@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using CaseEstudo1.Architecture.Interfaces;
+﻿using CaseEstudo1.Architecture.Interfaces;
 using CaseEstudo1.Data;
 using CaseEstudo1.Domain;
 using CaseEstudo1.DTOs;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace CaseEstudo1.Architecture.Services
 {
@@ -23,36 +23,24 @@ namespace CaseEstudo1.Architecture.Services
 
         public async Task<PedidoResponseDTO> CriarPedidoAsync(PedidoDTO pedidoDto)
         {
-            var pedido = _mapper.Map<Pedido>(pedidoDto);
+            var pizza = await _context.Pizzas
+                .Include(p => p.Borda)
+                .FirstOrDefaultAsync(p => p.Id == pedidoDto.PizzaId);
 
-            decimal total = 0m;
+            if (pizza == null) throw new Exception("Pizza não encontrada!");
 
-            foreach (var pizzaItem in pedidoDto.Pizzas)
+            var precoBorda = pizza.Borda?.Preco ?? 0m;
+
+            var pedido = new Pedido
             {
-                var pizza = await _context.Pizzas
-                    .Include(p => p.Borda)
-                    .Include(p => p.PizzasSabores)
-                        .ThenInclude(ps => ps.Sabor)
-                    .FirstOrDefaultAsync(p => p.Id == pizzaItem.PizzaId);
-
-                if (pizza != null)
-                {
-                    total += pizza.Preco;
-                }
-            }
-
-            foreach (var bebidaItem in pedidoDto.Bebidas)
-            {
-                var preco = await _context.PrecosBebidas
-                    .Where(pb => pb.BebidaId == bebidaItem.BebidaId && pb.Tamanho.ToString() == bebidaItem.Tamanho)
-                    .Select(pb => pb.Preco)
-                    .FirstOrDefaultAsync();
-
-                total += preco;
-            }
-
-            pedido.Total = total;
-            pedido.Status = "Em processamento."; 
+                PizzaId = pizza.Id,
+                NomeCliente = pedidoDto.NomeCliente,
+                TelefoneCliente = pedidoDto.TelefoneCliente,
+                NomeBebida = pedidoDto.NomeBebida,
+                PrecoBebida = pedidoDto.PrecoBebida,
+                PrecoTotal = pizza.Preco + (pedidoDto.PrecoBebida ?? 0m),
+                Status = "Em processamento"
+            };
 
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
@@ -63,10 +51,8 @@ namespace CaseEstudo1.Architecture.Services
         public async Task<IEnumerable<PedidoResponseDTO>> ListarPedidosAsync()
         {
             var pedidos = await _context.Pedidos
-                .Include(p => p.ItensPizza)
-                    .ThenInclude(ip => ip.Pizza)
-                .Include(p => p.ItensBebida)
-                    .ThenInclude(ib => ib.Bebida)
+                .Include(p => p.Pizza)
+                .ThenInclude(p => p.Borda)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<PedidoResponseDTO>>(pedidos);
@@ -75,10 +61,8 @@ namespace CaseEstudo1.Architecture.Services
         public async Task<PedidoResponseDTO?> BuscarPedidoPorIdAsync(int id)
         {
             var pedido = await _context.Pedidos
-                .Include(p => p.ItensPizza)
-                    .ThenInclude(ip => ip.Pizza)
-                .Include(p => p.ItensBebida)
-                    .ThenInclude(ib => ib.Bebida)
+                .Include(p => p.Pizza)
+                .ThenInclude(p => p.Borda)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return pedido == null ? null : _mapper.Map<PedidoResponseDTO>(pedido);
@@ -103,6 +87,5 @@ namespace CaseEstudo1.Architecture.Services
             await _context.SaveChangesAsync();
             return true;
         }
-
     }
 }
