@@ -1,0 +1,30 @@
+footer {
+  background-color: #f7dc6f;
+  color: #000000;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  
+
+  .social a {
+    color: #000000;
+    margin: 0 0.5rem;
+    text-decoration: none;
+
+  nav a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+}
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

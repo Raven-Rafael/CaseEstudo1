@@ -1,0 +1,37 @@
+<h2>Seu carrinho</h2>
+
+<div *ngIf="carrinho.length === 0">
+  <p>O carrinho está vazio.</p>
+</div>
+
+<table *ngIf="carrinho.length > 0">
+  <thead>
+    <tr>
+      <th>Pizza</th>
+      <th>Tamanho</th>
+      <th>Borda</th>
+      <th>Quantidade</th>
+      <th>Subtotal</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of carrinho">
+      <td>{{ item.sabores }}</td>
+      <td>{{ item.tamanho }}</td>
+      <td>{{ item.borda || '-' }}</td>
+      <td>
+        <button (click)="diminuirQuantidade(item)">-</button>
+        {{ item.quantidade }}
+        <button (click)="aumentarQuantidade(item)">+</button>
+      </td>
+      <td>R$ {{ item.subtotal * item.quantidade | number:'1.2-2' }}</td>
+      <td><button (click)="removerItem(item)">Remover</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="carrinho.length > 0" class="total-container">
+  <p><strong>Total: R$ {{ total | number:'1.2-2' }}</strong></p>
+  <button (click)="finalizarPedido()">Finalizar Pedido</button>
+</div>

@@ -1,0 +1,29 @@
+<h2>Crie sua conta</h2>
+
+<form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()">
+  <label>Nome</label>
+  <input formControlName="nome" type="text" />
+  <div *ngIf="cadastroForm.get('nome')?.invalid && cadastroForm.get('nome')?.touched">
+    Nome é obrigatório.
+  </div>
+
+  <label>Email</label>
+  <input formControlName="email" type="email" />
+  <div *ngIf="cadastroForm.get('email')?.invalid && cadastroForm.get('email')?.touched">
+    Email inválido.
+  </div>
+
+  <label>Senha</label>
+  <input formControlName="senha" type="password" />
+  <div *ngIf="cadastroForm.get('senha')?.invalid && cadastroForm.get('senha')?.touched">
+    Senha precisa ter pelo menos 6 caracteres.
+  </div>
+
+  <label>Confirmar Senha</label>
+  <input formControlName="confirmarSenha" type="password" />
+  <div *ngIf="cadastroForm.get('confirmarSenha')?.touched && cadastroForm.get('senha')?.value !== cadastroForm.get('confirmarSenha')?.value">
+    As senhas não coincidem.
+  </div>
+
+  <button type="submit" [disabled]="cadastroForm.invalid">Cadastrar</button>
+</form>

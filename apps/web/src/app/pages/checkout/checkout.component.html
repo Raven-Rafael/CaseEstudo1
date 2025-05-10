@@ -1,0 +1,31 @@
+<h2>Finalizar Pedido</h2>
+
+<div *ngIf="itens.length === 0">
+  <p>Seu carrinho está vazio.</p>
+</div>
+
+<table *ngIf="itens.length > 0">
+  <thead>
+    <tr>
+      <th>Pizza</th>
+      <th>Tamanho</th>
+      <th>Borda</th>
+      <th>Quantidade</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of itens">
+      <td>{{ item.sabores }}</td>
+      <td>{{ item.tamanho }}</td>
+      <td>{{ item.borda || '-' }}</td>
+      <td>{{ item.quantidade }}</td>
+      <td>R$ {{ item.subtotal * item.quantidade | number:'1.2-2' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="itens.length > 0" class="resumo">
+  <p><strong>Total: R$ {{ total | number:'1.2-2' }}</strong></p>
+  <button (click)="confirmarPedido()">Confirmar Pedido</button>
+</div>

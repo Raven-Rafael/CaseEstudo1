@@ -1,0 +1,36 @@
+form {
+  max-width: 400px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  input {
+    padding: 0.5rem;
+    margin-top: 0.2rem;
+  }
+
+  small {
+    color: red;
+    font-size: 0.8rem;
+  }
+
+  button {
+    margin-top: 1.5rem;
+    padding: 0.7rem;
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:disabled {
+      background-color: #888;
+      cursor: not-allowed;
+    }
+  }
+}

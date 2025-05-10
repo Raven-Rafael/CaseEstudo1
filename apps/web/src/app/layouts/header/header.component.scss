@@ -1,0 +1,32 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f7dc6f;
+  padding: 10px 30px;
+  border-bottom: 3px solid #4bd40b;
+  font-family: 'Ms Gothic', serif;
+
+  .logo img {
+    height: 50px;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  .botoes button {
+    margin: 0.5rem;
+    padding: 0.7rem 0.9rem;
+    border: none;
+    background-color: #70cc25;
+    color: rgb(255, 6, 6);
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      color: rgb(0, 0, 0);
+    }
+  }
+}

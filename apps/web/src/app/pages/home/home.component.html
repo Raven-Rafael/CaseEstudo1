@@ -1,0 +1,51 @@
+<section class="home-container">
+  <img src="assets/images/logo/logo.png" alt="Logo da Pizzaria" class="logo">
+
+  <h1>Bem-vindo ao Pizza Hat</h1>
+  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel nihil animi, officia quidem molestiae optio consequatur! Hic quidem soluta facere deserunt fuga possimus veniam sit magnam, explicabo voluptatem tempore vero.</p>
+
+
+  <div class="links">
+    <nav>
+      <a routerLink="/tradicionais">
+      <img src="assets/images/icons/pizza.png" alt="PizzaIcon" />
+      Tradicionais
+      </a>
+      <a routerLink="/especiais">
+      <img src="assets/images/icons/pizza.png" alt="PizzaIcon" />
+      Especiais
+      </a>
+      <a routerLink="/premium">
+      <img src="assets/images/icons/pizza.png" alt="PizzaIcon" />
+      Premium
+      </a>
+      <a routerLink="/fitness">
+      <img src="assets/images/icons/pizza.png" alt="PizzaIcon" />
+      Fitness
+      </a>
+      <a routerLink="/doces">
+      <img src="assets/images/icons/pizza.png" alt="PizzaIcon" />
+      Doces
+      </a>
+      <a routerLink="/docespremium">
+      <img src="assets/images/icons/pizza.png" alt="PizzaIcon" />
+      Doces Premium
+      </a>
+    </nav>
+  </div>
+
+  
+
+  <section class="destaques">
+    <h2>Mais amadas pelos nossos clientes</h2>
+
+    <div class="carrossel">
+
+      <div class="card" *ngFor="let pizza of pizzasDestaque">
+        <img [src]="pizza.imagem" alt="{{ pizza.nome }}">
+        <h3>{{ pizza.nome }}</h3>
+        <p>{{ pizza.descricao }}</p>
+      </div>
+    </div>
+  </section>
+</section>

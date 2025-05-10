@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 0.6rem;
+    text-align: center;
+  }
+
+  th {
+    background-color: #1c1c1c;
+    color: white;
+  }
+}
+
+.resumo {
+  text-align: right;
+
+  button {
+    background-color: #1c1c1c;
+    color: white;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+}

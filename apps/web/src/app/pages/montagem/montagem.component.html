@@ -1,0 +1,47 @@
+<h2>Monte sua pizza</h2>
+
+<!-- Tamanho -->
+<fieldset>
+  <legend>Escolha o tamanho:</legend>
+  <select [(ngModel)]="tamanhoSelecionado" name="tamanho" required>
+    <option value="" disabled selected>Selecione o tamanho</option>
+    <option *ngFor="let tamanho of tamanhos" [value]="tamanho">{{ tamanho }}</option>
+  </select>
+</fieldset>
+
+<!-- Sabores -->
+<fieldset [disabled]="!tamanhoSelecionado">
+  <legend>Escolha até {{ getLimiteSabores() }} sabor(es):</legend>
+  <p>Selecionados: {{ saboresSelecionados.length }} / {{ getLimiteSabores() }}</p>
+
+  <div *ngFor="let sabor of sabores">
+    <label>
+      <input type="checkbox"
+             [checked]="saboresSelecionados.includes(sabor)"
+             (change)="selecionarSabor(sabor)">
+      {{ sabor.nome }} - R$ {{ sabor.preco | number:'1.2-2' }}
+    </label>
+  </div>
+</fieldset>
+
+<!-- Borda -->
+<fieldset>
+  <legend>Escolha uma borda (opcional):</legend>
+  <div *ngFor="let borda of bordas">
+    <label>
+      <input type="radio"
+             name="borda"
+             [value]="borda"
+             [(ngModel)]="bordaSelecionada">
+      {{ borda.nome }} - R$ {{ borda.preco | number:'1.2-2' }}
+    </label>
+  </div>
+</fieldset>
+
+<!-- Subtotal -->
+<p><strong>Subtotal: R$ {{ getSubtotal() | number:'1.2-2' }}</strong></p>
+
+<!-- Botão -->
+<button (click)="adicionarAoCarrinho()" [disabled]="desabilitaBotao">
+  Adicionar ao carrinho
+</button>
